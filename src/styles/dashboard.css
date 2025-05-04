@@ -1,0 +1,93 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    color: yellow;
+    background-color: #111;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.dashboard-header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    justify-content: flex-end;
+}
+
+.dashboard-header input,
+.dashboard-header select {
+    padding: 0.5rem;
+    border: 2px solid yellow;
+    background-color: black;
+    color: yellow;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.dashboard-content {
+    display: flex;
+    gap: 2rem;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.doctor-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 300px;
+}
+
+.doctor-card {
+    padding: 1rem;
+    background-color: #222;
+    border-left: 4px solid yellow;
+    cursor: pointer;
+}
+
+.doctor-card.suspended {
+    opacity: 0.5;
+}
+
+.doctor-detail {
+    flex: 2;
+    background-color: #1a1a1a;
+    padding: 2rem;
+    border: 2px solid yellow;
+    border-radius: 6px;
+}
+
+.doctor-detail img {
+    width: 80%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+}
+
+.card-buttons button {
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+.card-buttons button:first-child {
+    background-color: #ffc107;
+    /* yellow for suspend */
+}
+
+.card-buttons button:last-child {
+    background-color: #f44336;
+    /* red for remove */
+}
+.map-container {
+    margin-top: 1rem;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.2);
+}
