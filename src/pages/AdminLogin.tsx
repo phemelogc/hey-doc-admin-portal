@@ -14,22 +14,21 @@ const AdminLogin: React.FC = () => {
     e.preventDefault();
     setError('');
 
-    // Hardcoded admin credentials
-    const adminEmail = 'admin@docapp.com';
-    const adminPassword = 'adminRulez';
-
-    if (email !== adminEmail || password !== adminPassword) {
-      setError('Invalid admin credentials.');
-      return;
-    }
-
     try {
       // Sign in using Firebase Authentication
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/Dashboard');
+      // Navigate to the dashboard after successful login
+      navigate('/dashboard');
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message);
+        // Handle specific Firebase authentication errors
+        if (err.message.includes('wrong-password')) {
+          setError('Incorrect password.');
+        } else if (err.message.includes('user-not-found')) {
+          setError('No user found with this email.');
+        } else {
+          setError('An unknown error occurred. Please try again.');
+        }
       } else {
         setError('An unknown error occurred. Please try again.');
       }
