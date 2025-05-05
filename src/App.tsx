@@ -5,7 +5,8 @@ import Dashboard from './pages/Dashboard';
 import RegisterDoctor from './pages/RegisterDoctor';
 import Analytics from './pages/Analytics';
 import Reports from './pages/Reports';
-import AdminLogin from './pages/AdminLogin'; 
+import AdminLogin from './pages/AdminLogin';
+
 import { auth } from './firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import './App.css';
@@ -15,11 +16,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
+      setIsAuthenticated(!!user);
     });
     return () => unsubscribe();
   }, []);
@@ -27,28 +24,33 @@ const App: React.FC = () => {
   return (
     <Router basename="/hey-doc-admin-portal">
       <Routes>
-        {/* Login Route */}
-        <Route path="/" element={!isAuthenticated ? <AdminLogin /> : <Navigate to="/dashboard" />} />
+       
+        <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <AdminLogin />} />
 
-        {/* Protected routes */}
+        
         <Route
           path="/*"
-          element={isAuthenticated ? (
-            <div className="app-container">
-              <Sidebar />
-              <div className="main-content">
-                <Routes>
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="register" element={<RegisterDoctor />} />
-                  <Route path="analytics" element={<Analytics />} />
-                  <Route path="reports" element={<Reports />} />
-                  <Route path="/" element={<Navigate to="/dashboard" />} />
-                </Routes>
+          element={
+            isAuthenticated ? (
+              <div className="app-container">
+                <Sidebar />
+                <div className="main-content">
+                  <div className="top-bar">
+                    
+                  </div>
+                  <Routes>
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="register" element={<RegisterDoctor />} />
+                    <Route path="analytics" element={<Analytics />} />
+                    <Route path="reports" element={<Reports />} />
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                  </Routes>
+                </div>
               </div>
-            </div>
-          ) : (
-            <Navigate to="/" />
-          )}
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
         />
       </Routes>
     </Router>

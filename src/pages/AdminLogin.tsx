@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/AdminLogin.css'; 
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig'; 
 import { useNavigate } from 'react-router-dom';
 
@@ -10,18 +10,20 @@ const AdminLogin: React.FC = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Forcin logout any existing session when this screen loads
+  useEffect(() => {
+    signOut(auth);
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     try {
-      // Sign in using Firebase Authentication
       await signInWithEmailAndPassword(auth, email, password);
-      // Navigate to the dashboard after successful login
-      navigate('/dashboard');
+      navigate('/Dashboard');
     } catch (err: unknown) {
       if (err instanceof Error) {
-        // Handle specific Firebase authentication errors
         if (err.message.includes('wrong-password')) {
           setError('Incorrect password.');
         } else if (err.message.includes('user-not-found')) {
@@ -37,6 +39,13 @@ const AdminLogin: React.FC = () => {
 
   return (
     <div className="admin-login-container">
+      {/* Display login credentials for lecturer */}
+      <div className="login-credentials-hint">
+        <strong>Login Details:</strong><br />
+        Email: <code>admin@docapp.com</code><br />
+        Password: <code>adminRulez</code>
+      </div>
+
       <div className="admin-login-card">
         <h2>Admin Login</h2>
         <form onSubmit={handleLogin}>
